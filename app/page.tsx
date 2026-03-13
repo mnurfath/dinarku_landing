@@ -406,6 +406,9 @@ export default function Home() {
             <a href="/privacy-policy" className="footer-link">
               Kebijakan Privasi
             </a>
+            <a href="/faq" className="footer-link">
+              FAQ
+            </a>
           </div>
         </div>
       </footer>
