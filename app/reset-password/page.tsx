@@ -10,6 +10,8 @@ export default function ResetPassword() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const appIntentUrl = "intent://reset-success#Intent;scheme=dinarku;package=com.mnurfath.dinarku;end";
+  const playStoreUrl = "https://play.google.com/store/apps/details?id=com.mnurfath.dinarku";
   const [sessionReady, setSessionReady] = useState(false);
   const [sessionError, setSessionError] = useState(false);
 
@@ -69,6 +71,8 @@ export default function ResetPassword() {
       setError(error.message);
     } else {
       setSuccess(true);
+      // Try to open the Android app automatically
+      window.location.href = appIntentUrl;
     }
   };
 
@@ -93,11 +97,18 @@ export default function ResetPassword() {
               <div className="auth-icon-success">✅</div>
               <h1 className="auth-title">Password Berhasil Direset</h1>
               <p className="auth-subtitle">
-                Password Anda telah diperbarui. Silakan buka aplikasi DinarKu
-                dan login dengan password baru Anda.
+                Password Anda telah diperbarui. Aplikasi DinarKu akan terbuka
+                secara otomatis. Jika tidak, tekan tombol di bawah.
               </p>
-              <a href="/" className="auth-btn" style={{ textAlign: "center" }}>
-                Kembali ke Beranda
+              <a href={appIntentUrl} className="auth-btn" style={{ textAlign: "center" }}>
+                Buka Aplikasi DinarKu
+              </a>
+              <a
+                href={playStoreUrl}
+                className="auth-back"
+                style={{ marginTop: "12px" }}
+              >
+                Belum punya aplikasi? Download di Play Store →
               </a>
             </>
           ) : sessionError && !sessionReady ? (
