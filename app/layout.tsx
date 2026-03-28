@@ -25,7 +25,8 @@ export const metadata: Metadata = {
   viewport: "width=device-width, initial-scale=1",
   themeColor: "#050505",
   icons: {
-    icon: "/transparent.png",
+    icon: "/app-icon.png",
+    apple: "/app-icon.png",
   },
 };
 
