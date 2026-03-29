@@ -414,7 +414,7 @@ export default function Home() {
             <div className="faq-show-all animate-on-scroll">
               <button
                 className="btn-secondary"
-                onClick={() => setShowAllFaqs(true)}
+                onClick={() => globalThis.window.open("/faq", "_blank")}
               >
                 Lihat Semua FAQ
               </button>
