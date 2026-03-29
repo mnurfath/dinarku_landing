@@ -73,12 +73,55 @@ const features = [
     title: "Notifikasi",
     desc: "Dapatkan pemberitahuan perubahan harga, pengingat zakat, dan update target tabungan.",
   },
+  {
+    icon: "🧮",
+    color: "gold",
+    title: "Kalkulator Investasi",
+    desc: "Simulasikan pertumbuhan aset dengan Kalkulator Compounding dan Kalkulator Kebebasan Finansial lengkap dengan perhitungan inflasi.",
+  },
+];
+
+const faqs = [
+  {
+    q: "Apa itu Dinar Khoiru Roziqin (Dinar KR)?",
+    a: "Dinar Khoiru Roziqin (DKR) adalah emas murni 24 karat (999,9 fine gold) berbentuk koin (dinar) yang diproduksi dan dipasarkan oleh PT Dinar Khoiru Roziqin, perusahaan resmi yang berpusat di Margonda, Depok.",
+  },
+  {
+    q: "Apakah Dinar KR resmi dan legal?",
+    a: "Ya. Dinar KR bukan alat tukar, melainkan komoditas emas batangan berbentuk koin yang diakui oleh Undang-Undang RI sebagai barang berharga yang boleh diperjualbelikan.",
+  },
+  {
+    q: "Berapa berat 1 Dinar KR?",
+    a: "1 Dinar KR = 4,25 gram emas murni 24K (999,9 fine gold). Standar ini mengikuti ukuran Dinar Islam klasik sejak masa Rasulullah ﷺ dan Khalifah Umar bin Khattab.",
+  },
+  {
+    q: "Apa hubungan Dinar KR dengan zakat?",
+    a: "Nisab zakat = 20 dinar = 85 gram emas. Zakatnya = ½ dinar (2,5%) per tahun. Menabung 20 dinar berarti sudah mencapai tingkat muzaki (orang wajib zakat).",
+  },
+  {
+    q: "Bagaimana cara membeli Dinar KR?",
+    a: "Melalui Sentra Layanan Dinar (SLD) terdekat atau Wakil Resmi (WR). Bisa juga via website resmi: www.dinarkr.com",
+  },
+  {
+    q: "Apakah Dinar KR MLM?",
+    a: "Bukan MLM. Tidak ada sistem member-get-member. Keuntungan berasal dari rabat penjualan, bukan perekrutan orang. Fokus utamanya adalah edukasi dan syiar ekonomi umat berbasis emas halal.",
+  },
+  {
+    q: "Apakah bisa membeli pecahan kecil?",
+    a: "Ya. Dinar KR memiliki berbagai pecahan mulai dari 1/8 Dinar (±0,53 gr) hingga 20 Dinar (85 gr) agar bisa disesuaikan dengan kemampuan setiap orang.",
+  },
+  {
+    q: "Bagaimana jika komunitas Dinar KR bubar?",
+    a: "Tidak masalah. Karena emas tetap emas — nilainya tidak bergantung pada komunitas. Dinar KR bisa dijual ke toko emas manapun, pegadaian, atau bahkan ke luar negeri.",
+  },
 ];
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [gallerySlide, setGallerySlide] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showAllFaqs, setShowAllFaqs] = useState(false);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   // Auto-rotate hero phone screenshots
@@ -334,6 +377,49 @@ export default function Home() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="faq" id="faq">
+        <div className="section-container">
+          <div className="section-header animate-on-scroll">
+            <span className="section-label">❓ FAQ</span>
+            <h2 className="section-title">Pertanyaan yang Sering Diajukan</h2>
+            <p className="section-subtitle">
+              Temukan jawaban seputar Dinar KR, investasi emas, dan fitur
+              DinarKu.
+            </p>
+          </div>
+
+          <div className="faq-list animate-on-scroll">
+            {(showAllFaqs ? faqs : faqs.slice(0, 4)).map((faq, i) => (
+              <div
+                key={i}
+                className={`faq-item ${openFaq === i ? "open" : ""}`}
+                onClick={() => setOpenFaq(openFaq === i ? null : i)}
+              >
+                <div className="faq-question">
+                  <span>{faq.q}</span>
+                  <span className="faq-toggle">{openFaq === i ? "−" : "+"}</span>
+                </div>
+                {openFaq === i && (
+                  <div className="faq-answer">{faq.a}</div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {!showAllFaqs && (
+            <div className="faq-show-all animate-on-scroll">
+              <button
+                className="btn-secondary"
+                onClick={() => setShowAllFaqs(true)}
+              >
+                Lihat Semua FAQ
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
