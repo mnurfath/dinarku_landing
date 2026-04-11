@@ -212,16 +212,9 @@ export default function Home() {
             />
             <span className="navbar-title">DinarKu</span>
           </a>
-          <button
-            className="navbar-cta"
-            onClick={() =>
-              document
-                .getElementById("download")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-          >
-            🚀 Coming Soon
-          </button>
+          <a href="/early-access" className="navbar-cta">
+            Join Early Access
+          </a>
         </div>
       </nav>
 
@@ -242,8 +235,8 @@ export default function Home() {
               otomatis, dan wujudkan impianmu dengan tabungan Dinar.
             </p>
             <div className="hero-actions">
-              <a href="#download" className="btn-primary">
-                🚀 Coming Soon
+              <a href="/early-access" className="btn-primary">
+                Join Early Access
               </a>
               <a href="#features" className="btn-secondary">
                 Pelajari Fitur
@@ -424,18 +417,18 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="cta" id="download">
+      <section className="cta" id="early-access">
         <div className="cta-card animate-on-scroll">
-          <h2 className="cta-title">Segera Hadir</h2>
+          <h2 className="cta-title">Join Early Access</h2>
           <p className="cta-desc">
-            DinarKu sedang dalam tahap pengembangan. Nantikan peluncurannya dan
-            kelola investasi Dinar emas Anda dengan mudah. Gratis, aman, dan
-            privacy-first.
+            Jadilah yang pertama mencoba DinarKu di Google Play Store.
+            Daftarkan Gmail Anda dan kami akan memberitahu saat aplikasi siap.
+            Gratis, tanpa spam.
           </p>
           <div className="cta-buttons">
-            <span className="btn-primary" style={{ cursor: "default" }}>
-              🚀 Coming Soon
-            </span>
+            <a href="/early-access" className="btn-primary">
+              Daftar Sekarang
+            </a>
           </div>
         </div>
       </section>
