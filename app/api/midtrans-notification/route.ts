@@ -67,7 +67,7 @@ export async function POST(request: Request) {
         console.error("No user_id in custom_field1 for order:", order_id);
       } else {
         const { error: updateError } = await supabase
-          .from("profiles")
+          .from("user_profiles")
           .update({
             subscription: "premium",
             premium_since: new Date().toISOString(),
