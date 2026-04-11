@@ -5,32 +5,52 @@ import Image from "next/image";
 
 const screenshots = [
   {
-    src: "/screenshots/Screenshot_1773144889.png",
+    src: "/screenshots/homepage.png",
     title: "Dashboard",
     desc: "Pantau total aset, keuntungan, dan kepemilikan Dinar Anda",
   },
   {
-    src: "/screenshots/Screenshot_1773144894.png",
+    src: "/screenshots/pertumbuhan_nilai.png",
     title: "Pertumbuhan Nilai",
     desc: "Analisis pertumbuhan portofolio dengan grafik interaktif",
   },
   {
-    src: "/screenshots/Screenshot_1773144899.png",
+    src: "/screenshots/zakat.png",
     title: "Kalkulator Zakat",
     desc: "Hitung zakat otomatis berdasarkan nisab dan haul",
   },
   {
-    src: "/screenshots/Screenshot_1773144932.png",
+    src: "/screenshots/dompet_impian_1.png",
     title: "Dompet Impian",
     desc: "Tetapkan target tabungan dan pantau progresnya",
   },
   {
-    src: "/screenshots/Screenshot_1773146158.png",
-    title: "Dompet Impian",
-    desc: "Kelola semua target mimpi dalam satu tempat",
+    src: "/screenshots/dompet_impian_detail.png",
+    title: "Detail Dompet Impian",
+    desc: "Kelola detail target tabungan impian Anda",
   },
   {
-    src: "/screenshots/Screenshot_1773146229.png",
+    src: "/screenshots/compounding_calculator.png",
+    title: "Kalkulator Compounding",
+    desc: "Simulasikan pertumbuhan aset dengan efek compounding",
+  },
+  {
+    src: "/screenshots/financial_freedom_calculator.png",
+    title: "Kalkulator Kebebasan Finansial",
+    desc: "Hitung target kebebasan finansial Anda",
+  },
+  {
+    src: "/screenshots/financial_freedom_calculator_2.png",
+    title: "Detail Kalkulator",
+    desc: "Lihat hasil simulasi kebebasan finansial lengkap",
+  },
+  {
+    src: "/screenshots/real_profit.png",
+    title: "Real Profit",
+    desc: "Lihat keuntungan nyata dari investasi Dinar Anda",
+  },
+  {
+    src: "/screenshots/market_place.png",
     title: "Marketplace",
     desc: "Jual beli Dinar emas 24 karat langsung dari aplikasi",
   },
@@ -42,42 +62,49 @@ const features = [
     color: "gold",
     title: "Portofolio Dinar",
     desc: "Pantau total aset, keuntungan real-time, dan detail kepemilikan setiap denominasi Dinar Anda.",
+    screenshot: "/screenshots/homepage.png",
   },
   {
     icon: "📈",
     color: "green",
     title: "Pertumbuhan Nilai",
     desc: "Lihat analisis pertumbuhan portofolio dengan grafik interaktif 7H, 30H, 90H, hingga semua waktu.",
+    screenshot: "/screenshots/pertumbuhan_nilai.png",
   },
   {
     icon: "🕌",
     color: "gold",
     title: "Kalkulator Zakat",
     desc: "Hitung zakat maal otomatis berdasarkan nisab 20 Dinar, progres haul, dan tarif 2.5%.",
+    screenshot: "/screenshots/zakat.png",
   },
   {
     icon: "🎯",
     color: "green",
     title: "Dompet Impian",
     desc: "Buat target tabungan seperti Dana Haji atau Tabungan Rumah, alokasikan Dinar, dan pantau progresnya.",
+    screenshot: "/screenshots/dompet_impian_1.png",
   },
   {
     icon: "🛒",
     color: "gold",
     title: "Marketplace",
     desc: "Jual beli Dinar emas 24 karat dari berbagai denominasi langsung melalui aplikasi.",
+    screenshot: "/screenshots/market_place.png",
   },
   {
-    icon: "🔔",
-    color: "green",
-    title: "Notifikasi",
-    desc: "Dapatkan pemberitahuan perubahan harga, pengingat zakat, dan update target tabungan.",
+    icon: "💰",
+    color: "gold",
+    title: "Real Profit",
+    desc: "Lihat keuntungan nyata dari investasi Dinar Anda secara transparan dan real-time.",
+    screenshot: "/screenshots/real_profit.png",
   },
   {
     icon: "🧮",
-    color: "gold",
+    color: "green",
     title: "Kalkulator Investasi",
     desc: "Simulasikan pertumbuhan aset dengan Kalkulator Compounding dan Kalkulator Kebebasan Finansial lengkap dengan perhitungan inflasi.",
+    screenshot: "/screenshots/compounding_calculator.png",
   },
 ];
 
@@ -122,6 +149,9 @@ export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showAllFaqs, setShowAllFaqs] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [activeFeature, setActiveFeature] = useState(0);
+  const [featurePaused, setFeaturePaused] = useState(false);
+  const featurePauseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   // Auto-rotate hero phone screenshots
@@ -175,10 +205,29 @@ export default function Home() {
     return () => clearInterval(timer);
   }, [nextGallerySlide]);
 
+  // Auto-rotate feature showcase
+  useEffect(() => {
+    if (featurePaused) return;
+    const timer = setInterval(() => {
+      setActiveFeature((prev) => (prev + 1) % features.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [featurePaused, activeFeature]);
+
+  const selectFeature = useCallback((index: number) => {
+    setActiveFeature(index);
+    setFeaturePaused(true);
+    if (featurePauseTimerRef.current) clearTimeout(featurePauseTimerRef.current);
+    featurePauseTimerRef.current = setTimeout(() => {
+      setFeaturePaused(false);
+    }, 8000);
+  }, []);
+
   const getGalleryPosition = (index: number) => {
-    const diff =
-      ((index - gallerySlide + screenshots.length) % screenshots.length) -
-      Math.floor(screenshots.length / 2);
+    const total = screenshots.length;
+    let diff = index - gallerySlide;
+    if (diff > total / 2) diff -= total;
+    if (diff < -total / 2) diff += total;
 
     if (Math.abs(diff) > 2)
       return { opacity: 0, transform: "scale(0.6)", zIndex: 0 };
@@ -212,16 +261,9 @@ export default function Home() {
             />
             <span className="navbar-title">DinarKu</span>
           </a>
-          <button
-            className="navbar-cta"
-            onClick={() =>
-              document
-                .getElementById("download")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-          >
-            🚀 Coming Soon
-          </button>
+          <a href="/early-access" className="navbar-cta">
+            Join Early Access
+          </a>
         </div>
       </nav>
 
@@ -242,8 +284,8 @@ export default function Home() {
               otomatis, dan wujudkan impianmu dengan tabungan Dinar.
             </p>
             <div className="hero-actions">
-              <a href="#download" className="btn-primary">
-                🚀 Coming Soon
+              <a href="/early-access" className="btn-primary">
+                Join Early Access
               </a>
               <a href="#features" className="btn-secondary">
                 Pelajari Fitur
@@ -289,20 +331,50 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="features-grid">
-            {features.map((feature, i) => (
-              <div
-                key={feature.title}
-                className="feature-card animate-on-scroll"
-                style={{ transitionDelay: `${i * 100}ms` }}
-              >
-                <div className={`feature-icon ${feature.color}`}>
-                  {feature.icon}
+          <div className="features-showcase animate-on-scroll">
+            <div className="features-menu">
+              {features.map((feature, i) => (
+                <button
+                  key={feature.title}
+                  className={`features-menu-item ${i === activeFeature ? "active" : ""} ${feature.color}`}
+                  onClick={() => selectFeature(i)}
+                >
+                  <span className="features-menu-icon">{feature.icon}</span>
+                  <span className="features-menu-title">{feature.title}</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="features-display">
+              <div className="features-phone">
+                <div className="features-phone-glow" />
+                <div className="features-phone-frame">
+                  <div className="features-phone-notch" />
+                  <div className="features-phone-screen">
+                    {features.map((feature, i) => (
+                      <Image
+                        key={feature.title}
+                        src={feature.screenshot}
+                        alt={feature.title}
+                        width={480}
+                        height={1040}
+                        className={i === activeFeature ? "active" : ""}
+                        priority={i === 0}
+                      />
+                    ))}
+                  </div>
                 </div>
-                <h3 className="feature-title">{feature.title}</h3>
-                <p className="feature-desc">{feature.desc}</p>
               </div>
-            ))}
+
+              <div className="features-display-info">
+                <h3 className="features-display-title">
+                  {features[activeFeature].title}
+                </h3>
+                <p className="features-display-desc">
+                  {features[activeFeature].desc}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -424,18 +496,18 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="cta" id="download">
+      <section className="cta" id="early-access">
         <div className="cta-card animate-on-scroll">
-          <h2 className="cta-title">Segera Hadir</h2>
+          <h2 className="cta-title">Join Early Access</h2>
           <p className="cta-desc">
-            DinarKu sedang dalam tahap pengembangan. Nantikan peluncurannya dan
-            kelola investasi Dinar emas Anda dengan mudah. Gratis, aman, dan
-            privacy-first.
+            Jadilah yang pertama mencoba DinarKu di Google Play Store.
+            Daftarkan Gmail Anda dan kami akan memberitahu saat aplikasi siap.
+            Gratis, tanpa spam.
           </p>
           <div className="cta-buttons">
-            <span className="btn-primary" style={{ cursor: "default" }}>
-              🚀 Coming Soon
-            </span>
+            <a href="/early-access" className="btn-primary">
+              Daftar Sekarang
+            </a>
           </div>
         </div>
       </section>
