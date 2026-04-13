@@ -71,6 +71,7 @@ export async function POST(request: Request) {
           .update({
             subscription: "premium",
             premium_since: new Date().toISOString(),
+            parent_user_code: "WR0000335",
           })
           .eq("id", userId);
 
