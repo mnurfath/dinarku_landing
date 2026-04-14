@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { supabaseBrowser } from "../lib/supabase-browser";
 
-export default function ForgotPassword() {
+export default function VerifyEmail() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
@@ -15,8 +15,12 @@ export default function ForgotPassword() {
     setLoading(true);
     setError("");
 
-    const { error } = await supabaseBrowser.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
+    const { error } = await supabaseBrowser.auth.resend({
+      type: "signup",
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/confirm`,
+      },
     });
 
     setLoading(false);
@@ -47,9 +51,9 @@ export default function ForgotPassword() {
           {sent ? (
             <>
               <div className="auth-icon-success">✉️</div>
-              <h1 className="auth-title">Cek Email Anda</h1>
+              <h1 className="auth-title">Email Terkirim</h1>
               <p className="auth-subtitle">
-                Kami telah mengirim link reset password ke{" "}
+                Kami telah mengirim ulang email konfirmasi ke{" "}
                 <strong>{email}</strong>. Silakan cek inbox atau folder spam
                 Anda.
               </p>
@@ -65,11 +69,11 @@ export default function ForgotPassword() {
             </>
           ) : (
             <>
-              <div className="auth-icon">🔑</div>
-              <h1 className="auth-title">Lupa Password?</h1>
+              <div className="auth-icon">📧</div>
+              <h1 className="auth-title">Verifikasi Email</h1>
               <p className="auth-subtitle">
                 Masukkan email yang terdaftar di akun DinarKu Anda. Kami akan
-                mengirimkan link untuk reset password.
+                mengirimkan ulang link konfirmasi.
               </p>
 
               <form onSubmit={handleSubmit} className="auth-form">
@@ -95,7 +99,7 @@ export default function ForgotPassword() {
                   disabled={loading}
                   className="auth-btn"
                 >
-                  {loading ? "Mengirim..." : "Kirim Link Reset"}
+                  {loading ? "Mengirim..." : "Kirim Email Konfirmasi"}
                 </button>
               </form>
             </>
