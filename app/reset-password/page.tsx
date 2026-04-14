@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { supabase } from "../lib/supabase";
+import { supabaseBrowser } from "../lib/supabase-browser";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -18,7 +18,7 @@ export default function ResetPassword() {
   useEffect(() => {
     // Supabase automatically picks up the tokens from the URL hash
     // when using createClient on the browser
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+    const { data: { subscription } } = supabaseBrowser.auth.onAuthStateChange(
       (event) => {
         if (event === "PASSWORD_RECOVERY") {
           setSessionReady(true);
@@ -27,7 +27,7 @@ export default function ResetPassword() {
     );
 
     // Also check if we already have a session (user clicked link and session was established)
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabaseBrowser.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         setSessionReady(true);
       }
@@ -63,7 +63,7 @@ export default function ResetPassword() {
 
     setLoading(true);
 
-    const { error } = await supabase.auth.updateUser({ password });
+    const { error } = await supabaseBrowser.auth.updateUser({ password });
 
     setLoading(false);
 

@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -34,6 +35,11 @@ export const viewport: Viewport = {
   themeColor: "#050505",
 };
 
+const midtransSnapUrl =
+  process.env.NEXT_PUBLIC_MIDTRANS_IS_PRODUCTION === "true"
+    ? "https://app.midtrans.com/snap/snap.js"
+    : "https://app.sandbox.midtrans.com/snap/snap.js";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -41,6 +47,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
+      <head>
+        <Script
+          src={midtransSnapUrl}
+          data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY}
+          strategy="lazyOnload"
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
